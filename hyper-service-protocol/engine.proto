@@ -1,0 +1,26 @@
+// Protocol Buffers
+
+syntax = "proto3";
+
+package core.sync;
+
+// High-performance data synchronization service
+service CoreSyncEngine {
+  rpc DispatchStream (DataPackage) returns (SyncResponse) {}
+}
+
+message DataPackage {
+  string node_id = 1;
+  bytes payload = 2; // Binary stream for low-latency
+  int64 checksum = 3;
+}
+
+message SyncResponse {
+  enum StatusCode {
+    SUCCESS = 0;
+    ASYNC_PROCESSING = 1;
+    FAILED = 2;
+  }
+  StatusCode code = 1;
+  string cluster_node = 2;
+}
